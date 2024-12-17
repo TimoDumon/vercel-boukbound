@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="listings-section">
+    <h2>My Listings</h2>
+
+    {% if listings %}
+        <div class="listings-container">
+            {% for listing in listings %}
+                <div class="listing-item">
+                    <div class="listing-content">
+                        <div class="listing-text">
+                            <h3>{{ listing.book.title }}</h3>
+                            <p><strong>Author:</strong> {{ listing.book.author }}</p>
+                            <p><strong>Price:</strong> {{ listing.price }} EUR</p>
+                            <p><strong>Condition:</strong> {{ listing.condition }}</p>
+                            <p><strong>Status:</strong> {{ listing.status }}</p>
+                        </div>
+                        <!-- Image Display -->
+                        <div class="listing-image">
+                            {% if listing.image_files and listing.image_files|length > 0 %}
+                                <img src="{{ listing.image_files[0].file_path }}" alt="Listing Image" style="max-width: 100%; height: 175px; object-fit: contain; border-radius: 5px;">
+                            {% else %}
+                                <p><strong>No image available</strong></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="listing-actions">
+                        <a href="{{ url_for('main.listing_detail', listing_id=listing.listing_id) }}" class="btn-detail">
+                            View Details
+                        </a>
+                        <a href="{{ url_for('main.edit_listings', listing_id=listing.listing_id) }}" class="btn-primary">
+                            Edit Listing
+                        </a>
+                        <form method="POST" action="{{ url_for('main.delete_listing', listing_id=listing.listing_id) }}" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn-danger">Delete Listing</button>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have no listings yet.</p>
+    {% endif %}
+</section>
+
+<style>
+    .listings-section {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .listings-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .listing-item {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .listing-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .listing-text {
+        flex: 1;
+        margin-right: 20px;
+    }
+
+    .listing-text h3 {
+        margin: 0 0 10px 0;
+        font-size: 20px;
+    }
+
+    .listing-text p {
+        margin: 5px 0;
+    }
+
+    .listing-image {
+        flex-shrink: 0;
+    }
+
+    .listing-image img {
+        display: block;
+        max-width: 200px; /* Grootte van de foto vergroot */
+        height: auto; /* Behoudt de juiste verhoudingen */
+        border-radius: 10px;
+    }
+
+    .listing-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-detail, .btn-primary, .btn-danger {
+        color: white;
+        padding: 8px 12px;
+        text-decoration: none;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-detail {
+        background-color: #007BFF;
+    }
+
+    .btn-detail:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-primary {
+        background-color: #28a745;
+    }
+
+    .btn-primary:hover {
+        background-color: #218838;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+</style>
+{% endblock %}

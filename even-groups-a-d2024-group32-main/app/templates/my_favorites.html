@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="favorites-section">
+    <h2 style="text-align: center; margin-bottom: 20px;">My Favorites</h2>
+
+    {% if favorites %}
+        <div class="favorites-container">
+            {% for favorite in favorites %}
+                <div class="favorite-item">
+                    <!-- Inhoud -->
+                    <div class="favorite-content">
+                        <div class="favorite-details">
+                            <h3 style="color: black; font-weight: bold;">{{ favorite.listing.book.title }}</h3>
+                            <p><strong>Author:</strong> {{ favorite.listing.book.author }}</p>
+                            <p><strong>Price:</strong> {{ favorite.listing.price }} EUR</p>
+                            <p><strong>Condition:</strong> {{ favorite.listing.condition }}</p>
+                            <p><strong>Status:</strong> {{ favorite.listing.status }}</p>
+                        </div>
+
+                        <!-- Foto rechts -->
+                        <div class="favorite-image">
+                            {% if favorite.listing.image_files and favorite.listing.image_files|length > 0 %}
+                                <img src="{{ favorite.listing.image_files[0].file_path }}" alt="Listing Image">
+                            {% else %}
+                                <p>No image available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Beschikbaarheidsmelding -->
+                    {% if favorite.listing.status != 'Available' %}
+                        <div class="availability-message">
+                            <p>This listing is no longer available for purchase or reservation.</p>
+                        </div>
+                    {% endif %}
+
+                    <!-- Acties onderaan -->
+                    <div class="favorite-actions">
+                        {% if favorite.listing.status == 'Available' %}
+                            <!-- Koop nu -->
+                            <form action="{{ url_for('main.buy_listing', listing_id=favorite.listing.listing_id) }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-success">Buy Now</button>
+                            </form>
+                            <!-- Reserveren -->
+                            <form action="{{ url_for('main.reserve_listing', listing_id=favorite.listing.listing_id) }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-warning">Reserve</button>
+                            </form>
+                        {% endif %}
+                        <!-- Verwijderen -->
+                        <form action="{{ url_for('main.remove_from_favorites', listing_id=favorite.listing.listing_id) }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                        <!-- Details bekijken -->
+                        <a href="{{ url_for('main.listing_detail', listing_id=favorite.listing.listing_id) }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align: center; color: gray;">You have no favorites yet.</p>
+    {% endif %}
+</section>
+
+<!-- Styling -->
+<style>
+    .favorites-section {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .favorites-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .favorite-item {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .favorite-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .favorite-details {
+        flex: 1;
+    }
+
+    .favorite-details h3 {
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .favorite-details p {
+        margin: 5px 0;
+    }
+
+    .favorite-image {
+        flex-shrink: 0;
+        text-align: right;
+    }
+
+    .favorite-image img {
+        width: 150px;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    .availability-message {
+        margin-bottom: 10px;
+        color: #dc3545;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .favorite-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: black;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}

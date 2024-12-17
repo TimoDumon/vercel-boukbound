@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Images Section -->
+<div style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+    <div style="flex: 1; max-width: 33%; height: 250px; overflow: hidden;">
+        <img src="https://mustreads.nl/wp-content/uploads/2015/03/books-650x403.jpg"
+             alt="Books Image 1"
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+    </div>
+    <div style="flex: 1; max-width: 33%; height: 250px; overflow: hidden;">
+        <img src="https://debengelonline.nl/wp-content/uploads/2021/05/boekenweek-campagnebeeld.jpg"
+             alt="Featured Book Image"
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+    </div>
+    <div style="flex: 1; max-width: 33%; height: 250px; overflow: hidden;">
+        <img src="https://mustreads.nl/wp-content/uploads/2015/02/6363562459_7399ee3c3e_b-650x403.jpg"
+             alt="Books Image 2"
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+    </div>
+</div>
+
+<!-- Listings Section -->
+<div class="listing-container" style="padding: 20px;">
+    <!-- Available Listings -->
+    <h3 style="text-align: center;">Available Listings</h3>
+    <div class="listings-grid">
+        {% for listing in available_listings %}
+            <div class="listing-item">
+                <h4 style="font-weight: normal;">{{ listing.book.title }}</h4>
+                <div class="listing-image">
+                    {% if listing.image_files and listing.image_files|length > 0 %}
+                        <img src="{{ listing.image_files[0].file_path }}" alt="Listing Image" style="width: 100%; height: 200px; object-fit: contain; border-radius: 5px;">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                </div>
+                <p><strong>Author:</strong> {{ listing.book.author }}</p>
+                <p><strong>Price:</strong> {{ listing.price }} EUR</p>
+                <p><strong>Condition:</strong> {{ listing.condition }}</p>
+
+                <div class="action-links">
+                    <form method="POST" action="{{ url_for('main.buy_listing', listing_id=listing.listing_id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="red-link">Buy Now</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('main.reserve_listing', listing_id=listing.listing_id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="red-link">Reserve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('main.add_to_favorites', listing_id=listing.listing_id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="red-link">Add to Favorite</button>
+                    </form>
+                </div>
+                <a href="{{ url_for('main.listing_detail', listing_id=listing.listing_id) }}" class="view-details">View Details</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Reserved Listings -->
+    <h3 style="text-align: center; margin-top: 40px;">Reserved Listings</h3>
+    <div class="listings-grid">
+        {% for listing in reserved_listings %}
+            <div class="listing-item">
+                <h4 style="font-weight: normal;">{{ listing.book.title }} (Reserved)</h4>
+                <div class="listing-image">
+                    {% if listing.image_files and listing.image_files|length > 0 %}
+                        <img src="{{ listing.image_files[0].file_path }}" alt="Listing Image" style="width: 100%; height: 200px; object-fit: contain; border-radius: 5px;">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                </div>
+                <a href="{{ url_for('main.listing_detail', listing_id=listing.listing_id) }}" class="view-details">View Details</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Sold Listings -->
+    <h3 style="text-align: center; margin-top: 40px;">Sold Listings</h3>
+    <div class="listings-grid">
+        {% for listing in sold_listings %}
+            <div class="listing-item">
+                <h4 style="font-weight: normal;">{{ listing.book.title }} (Sold)</h4>
+                <div class="listing-image">
+                    {% if listing.image_files and listing.image_files|length > 0 %}
+                        <img src="{{ listing.image_files[0].file_path }}" alt="Listing Image" style="width: 100%; height: 200px; object-fit: contain; border-radius: 5px;">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                </div>
+                <a href="{{ url_for('main.listing_detail', listing_id=listing.listing_id) }}" class="view-details">View Details</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Styling -->
+<style>
+    .listings-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr); /* 6 kolommen */
+        gap: 15px; /* Kleinere ruimte tussen items */
+    }
+
+    .listing-item {
+        border: 1px solid #e0e0e0;
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .listing-image img {
+        width: 100%;
+        height: 200px; /* Kleinere hoogte */
+        object-fit: contain;
+        margin-bottom: 10px;
+    }
+
+    .action-links {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .red-link {
+        color: #dc3545;
+        background: none;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .red-link:hover {
+        text-decoration: underline;
+    }
+
+    .view-details {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .view-details:hover {
+        text-decoration: underline;
+    }
+</style>
+
+{% endblock %}

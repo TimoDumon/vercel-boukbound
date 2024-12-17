@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="transactions-section">
+        <h2>My Transactions</h2>
+        {% if transactions %}
+            <div class="transactions-list">
+                {% for transaction in transactions %}
+                    <div class="transaction-item">
+                        <p><strong>Listing Title:</strong> {{ transaction.listing.book.title }}</p>
+                        <p><strong>Price:</strong> {{ transaction.listing.price }} EUR</p>
+                        <p><strong>Purchased On:</strong> {{ transaction.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>You have not made any purchases yet.</p>
+        {% endif %}
+    </section>
+{% endblock %}

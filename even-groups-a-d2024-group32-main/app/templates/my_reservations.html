@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="reservations-section">
+    <h2 style="text-align: center; margin-bottom: 20px;">My Reservations</h2>
+
+    {% if reservations %}
+        <div class="reservations-container">
+            {% for reservation, listing in reservations %}
+                <div class="reservation-item">
+                    <div class="reservation-content">
+                        <!-- Details links -->
+                        <div class="reservation-details">
+                            <h3 style="color: black; font-weight: bold;">{{ listing.book.title }}</h3>
+                            <p><strong>Author:</strong> {{ listing.book.author }}</p>
+                            <p><strong>Price:</strong> {{ listing.price }} EUR</p>
+                            <p><strong>Condition:</strong> {{ listing.condition }}</p>
+                            <p><strong>Status:</strong> {{ listing.status }}</p>
+                            <p><strong>Reserved On:</strong> {{ reservation.timestamp.strftime('%Y-%m-%d') }}</p>
+                        </div>
+
+                        <!-- Foto rechts -->
+                        <div class="reservation-image">
+                            {% if listing.image_files and listing.image_files|length > 0 %}
+                                <img src="{{ listing.image_files[0].file_path }}" alt="Listing Image">
+                            {% else %}
+                                <p>No image available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Actieknoppen onderaan -->
+                    <div class="reservation-actions">
+                        <a href="{{ url_for('main.listing_detail', listing_id=listing.listing_id) }}" class="btn btn-detail">View Details</a>
+
+                        <!-- Buy Now Form -->
+                        <form method="POST" action="{{ url_for('main.buy_reserved_listing', listing_id=listing.listing_id, reservation_id=reservation.reservation_id) }}" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-primary">Buy Now</button>
+                        </form>
+
+                        <!-- Delete Reservation Form -->
+                        <form method="POST" action="{{ url_for('main.delete_reservation', reservation_id=reservation.reservation_id) }}" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-danger">Delete Reservation</button>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align: center; color: gray;">You have no reservations at this time.</p>
+    {% endif %}
+</section>
+
+<!-- Styling -->
+<style>
+    .reservations-section {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .reservations-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .reservation-item {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .reservation-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .reservation-details {
+        flex: 1;
+    }
+
+    .reservation-details h3 {
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: black;
+    }
+
+    .reservation-details p {
+        margin: 5px 0;
+    }
+
+    .reservation-image {
+        flex-shrink: 0;
+        text-align: right;
+    }
+
+    .reservation-image img {
+        width: 150px;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    .reservation-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-detail {
+        background-color: #007BFF;
+    }
+
+    .btn-detail:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-primary {
+        background-color: #28a745;
+    }
+
+    .btn-primary:hover {
+        background-color: #218838;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+</style>
+{% endblock %}

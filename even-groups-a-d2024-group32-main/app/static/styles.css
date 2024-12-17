@@ -1,0 +1,110 @@
+/* Navigation Bar */
+.navbar {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 30px;  /* Reduced the padding for a thinner navbar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;  /* Ensure padding doesn't affect the width */
+    height: 70px;  /* Adjust the height of the navbar */
+}
+
+.nav-left, .nav-right {
+    flex: 1;
+}
+
+.nav-center {
+    text-align: left; /* Aligning the navbar items to the left */
+    flex: 2;
+}
+
+.navbar a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+.nav-center h1 {
+    font-family: 'Times New Roman', serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero-section {
+    background-image: url('https://visie-eo.cdn.eo.nl/w_2520/1u1pilau1nnb-stapel-boeken.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 500px;  /* Adjusted the height of the hero image */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 50px;  /* Adjust padding to the left */
+}
+
+.hero-text {
+    color: white;
+    font-size: 2.5rem;
+    text-align: left;
+    max-width: 600px;  /* Restricting width of the text block */
+    margin-left: 20px;  /* Added left margin for spacing */
+}
+
+.hero-text p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+/* Listings Section */
+.listing-container {
+    margin-top: 50px;
+    padding: 0 20px;
+}
+
+.listings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.listing-item {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 5px;
+    width: 45%;
+}
+
+.listing-item h3 {
+    margin-bottom: 10px;
+}
+
+.btn-detail {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-detail:hover {
+    background-color: #0056b3;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5em;
+    transition: transform 0.2s;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.1);
+}
+

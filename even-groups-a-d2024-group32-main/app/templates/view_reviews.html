@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="reviews-container">
+    <h2>Reviews for "{{ listing.book.title }}"</h2>
+    {% if reviews %}
+        <div class="reviews-list">
+            {% for review in reviews %}
+                <div class="review-item">
+                    <div class="review-header">
+                        <strong>{{ review.user.name }}</strong>
+                        <span class="review-rating">
+                            {% for star in range(review.rating) %}
+                                ★
+                            {% endfor %}
+                            {% for star in range(5 - review.rating) %}
+                                ☆
+                            {% endfor %}
+                        </span>
+                    </div>
+                    <p class="review-comment">{{ review.comment }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-reviews">No reviews available for this listing.</p>
+    {% endif %}
+</div>
+
+<style>
+    /* Container Styling */
+    .reviews-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .reviews-container h2 {
+        margin-bottom: 20px;
+        color: #333;
+        font-size: 24px;
+    }
+
+    /* Reviews List */
+    .reviews-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .review-item {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .review-header strong {
+        font-size: 16px;
+        color: #007BFF;
+    }
+
+    .review-rating {
+        font-size: 16px;
+        color: #ffc107; /* Gold for stars */
+    }
+
+    .review-rating .star-empty {
+        color: #ddd; /* Empty star color */
+    }
+
+    .review-comment {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .no-reviews {
+        font-size: 16px;
+        color: #666;
+    }
+
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+        .reviews-container {
+            padding: 20px;
+        }
+
+        .review-item {
+            padding: 10px;
+        }
+    }
+</style>
+{% endblock %}

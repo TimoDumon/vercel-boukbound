@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="add-listing-section">
+    <!-- Centered Icon and Header -->
+    <div style="text-align: center;">
+        <img src="https://d1nhio0ox7pgb.cloudfront.net/_img/v_collection_png/512x512/shadow/books_blue_add.png" 
+             alt="Add Listing Logo" 
+             style="width: 100px; height: 100px; margin-bottom: 20px;">
+    </div>
+    <h2>Add Listing</h2>
+
+    <!-- Add Listing Form -->
+    <div class="listing-container">
+        <form action="{{ url_for('main.add_listing') }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <!-- Book Details -->
+            <label for="book_title">Book Title:</label>
+            <input type="text" name="book_title" id="book_title" required>
+
+            <label for="book_author">Author:</label>
+            <input type="text" name="book_author" id="book_author" required>
+
+            <label for="isbn">ISBN:</label>
+            <input type="text" name="isbn" id="isbn">
+
+            <label for="year">Year:</label>
+            <input type="number" name="year" id="year">
+
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" rows="4" required></textarea>
+
+            <!-- Listing Details -->
+            <label for="price">Price:</label>
+            <input type="number" name="price" id="price" step="0.01" required>
+
+            <label for="condition">Condition:</label>
+            <select name="condition" id="condition" required>
+                <option value="New">New</option>
+                <option value="Used">Used</option>
+            </select>
+
+            <!-- Upload Image -->
+            <label for="image_file">Upload Image:</label>
+            <input type="file" name="image_file" id="image_file" accept="image/*">
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-primary">Add Listing</button>
+        </form>
+    </div>
+</section>
+
+<style>
+    .add-listing-section {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .listing-container {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea,
+    input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    button {
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-primary {
+        color: white;
+        background-color: #28a745;
+    }
+
+    .btn-primary:hover {
+        background-color: #218838;
+    }
+</style>
+{% endblock %}
